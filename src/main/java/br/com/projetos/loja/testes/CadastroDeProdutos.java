@@ -2,18 +2,28 @@ package br.com.projetos.loja.testes;
 
 import java.math.BigDecimal;
 
+import javax.persistence.EntityManager;
+
+import br.com.projetos.loja.dao.CategoriaDao;
+import br.com.projetos.loja.dao.ProdutoDao;
+import br.com.projetos.loja.modelo.Categoria;
 import br.com.projetos.loja.modelo.Produto;
+import br.com.projetos.loja.util.JPAUtil;
 
 public class CadastroDeProdutos {
 	public static void main(String[] args) {
-		Produto celular = new Produto();
+		Categoria celulares = new Categoria("CELULARES");
+		Produto celular = new Produto("Iphone 11", "massa", new BigDecimal(800), celulares);
+
+		EntityManager em = JPAUtil.getEntityManager();
+		ProdutoDao produtoDao = new ProdutoDao(em);
+		CategoriaDao categoriaDao = new CategoriaDao(em);
 		
-		celular.setNome("Iphone 11");
-		celular.setDescricao("massa");
-		celular.setPreco(new BigDecimal(800));
-		
-		
-				
-				
+		em.getTransaction().begin();
+		categoriaDao.cadastrar(celulares);
+		produtoDao.cadastrar(celular);
+		em.getTransaction().commit();
+		em.close();
+
 	}
 }
