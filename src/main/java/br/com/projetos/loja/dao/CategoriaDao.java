@@ -15,4 +15,12 @@ public class CategoriaDao {
 		this.em.persist(categoria);
 	}
 
+	public void update(Categoria categoria) {
+		this.em.merge(categoria);
+	}
+	
+	public void remove(Categoria categoria) {
+		categoria = em.merge(categoria);
+		this.em.remove(categoria);   
+	}
 }
